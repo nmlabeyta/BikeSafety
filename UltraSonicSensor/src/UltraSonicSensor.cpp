@@ -1,6 +1,15 @@
+/******************************************************/
+//       THIS IS A GENERATED FILE - DO NOT EDIT       //
+/******************************************************/
+
+#include "Particle.h"
+#line 1 "c:/Users/Benja/Documents/IOT/BikeSafety/UltraSonicSensor/src/UltraSonicSensor.ino"
 /* Example code for HC-SR04 ultrasonic distance sensor with Arduino. No library required. More info: https://www.makerguides.com */
 
 // Define Trig and Echo pin:
+void setup();
+void loop();
+#line 4 "c:/Users/Benja/Documents/IOT/BikeSafety/UltraSonicSensor/src/UltraSonicSensor.ino"
 int trigPin = D4;
 int echoPin = D5;
 
