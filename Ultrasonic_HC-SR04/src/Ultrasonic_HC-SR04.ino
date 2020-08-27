@@ -52,10 +52,10 @@ void sendTriggerPulse(int pin){
 void oneMeterAlarm(){
   //-----this is the alarm set to go off at 1 meter----//
   UltraSonicFunction();
-    if (cm<100){
+    if (cm<125){
         if (beam_status==false){
             
-            Serial.println("less than 150cm");
+            Serial.println("less than 125cm");
             beam_status = true;   
         }
     } else {
