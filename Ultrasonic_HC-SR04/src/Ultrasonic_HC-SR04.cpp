@@ -17,7 +17,7 @@ void loop();
 void UltraSonicFunction();
 void waitForEcho(int pin, int value, long timeout);
 void sendTriggerPulse(int pin);
-void oneMeterAlarm();
+void doSomethingWhenDistanceIs(int distanceIs);
 void timerfunction(int timer);
 #line 9 "c:/Users/Benja/Documents/IOT/BikeSafety/Ultrasonic_HC-SR04/src/Ultrasonic_HC-SR04.ino"
 bool beam_status = false;
@@ -34,7 +34,7 @@ void setup() {
 
 void loop() {
   // UltraSonicFunction();
-  oneMeterAlarm();
+  doSomethingWhenDistanceIs(125);
 }
 
 void UltraSonicFunction(){
@@ -63,10 +63,10 @@ void sendTriggerPulse(int pin){
     digitalWrite(pin, LOW);
 }
 
-void oneMeterAlarm(){
+void doSomethingWhenDistanceIs(int distanceIs){
   //-----this is the alarm set to go off at 1 meter----//
   UltraSonicFunction();
-    if (cm<125){
+    if (cm<distanceIs){
         if (beam_status==false){
             
             Serial.println("less than 125cm");

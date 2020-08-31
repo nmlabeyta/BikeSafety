@@ -20,7 +20,7 @@ void setup() {
 
 void loop() {
   // UltraSonicFunction();
-  oneMeterAlarm();
+  doSomethingWhenDistanceIs(125);
 }
 
 void UltraSonicFunction(){
@@ -49,10 +49,10 @@ void sendTriggerPulse(int pin){
     digitalWrite(pin, LOW);
 }
 
-void oneMeterAlarm(){
+void doSomethingWhenDistanceIs(int distanceIs){
   //-----this is the alarm set to go off at 1 meter----//
   UltraSonicFunction();
-    if (cm<125){
+    if (cm<distanceIs){
         if (beam_status==false){
             
             Serial.println("less than 125cm");
