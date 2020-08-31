@@ -1,3 +1,8 @@
+/******************************************************/
+//       THIS IS A GENERATED FILE - DO NOT EDIT       //
+/******************************************************/
+
+#line 1 "c:/Users/Benja/Documents/IOT/BikeSafety/GPS/GPS2/src/GPS2.ino"
 
 
 #include "Particle.h"
@@ -10,6 +15,10 @@
 */
 
 
+void setup();
+void loop();
+void displayInfo();
+#line 13 "c:/Users/Benja/Documents/IOT/BikeSafety/GPS/GPS2/src/GPS2.ino"
 SYSTEM_THREAD(ENABLED);
 
 const unsigned long PUBLISH_PERIOD = 120000;
