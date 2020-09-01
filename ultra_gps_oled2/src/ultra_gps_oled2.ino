@@ -1,9 +1,5 @@
-/*
- * Project GPSTrial
- * Description: Trial Program to Use TinyGPS++ on the Particle Argon with Display to OLED
- * Author: Brian Rashap
- * Date: 28-AUG-2020
- */
+
+
 
 #include "Particle.h"
 #include "TinyGPS++.h"
@@ -61,7 +57,7 @@ void setup()
   
 
 	delay(500);
-	Serial.println("attempt 17");
+	Serial.println("attempt 18");
 	delay(500);
 
 }
@@ -147,7 +143,7 @@ void UltraSonicFunction(){
   float duration = endTime - startTime;
   cm = duration / 58.0; //the speed of sound?//
     // Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
-    delay(2000);
+    delay(100);
 }
 
 void waitForEcho(int pin, int value, long timeout){

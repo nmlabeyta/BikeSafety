@@ -3,12 +3,8 @@
 /******************************************************/
 
 #line 1 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
-/*
- * Project GPSTrial
- * Description: Trial Program to Use TinyGPS++ on the Particle Argon with Display to OLED
- * Author: Brian Rashap
- * Date: 28-AUG-2020
- */
+
+
 
 #include "Particle.h"
 #include "TinyGPS++.h"
@@ -30,7 +26,7 @@ void UltraSonicFunction();
 void waitForEcho(int pin, int value, long timeout);
 void sendTriggerPulse(int pin);
 void doSomethingWhenDistanceIs(int distanceIs);
-#line 20 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
+#line 16 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
 #define OLED_RESET D4
 Adafruit_SSD1306 display(OLED_RESET);
 
@@ -75,7 +71,7 @@ void setup()
   
 
 	delay(500);
-	Serial.println("attempt 15");
+	Serial.println("attempt 18");
 	delay(500);
 
 }
@@ -161,7 +157,7 @@ void UltraSonicFunction(){
   float duration = endTime - startTime;
   cm = duration / 58.0; //the speed of sound?//
     // Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
-    delay(2000);
+    delay(100);
 }
 
 void waitForEcho(int pin, int value, long timeout){
