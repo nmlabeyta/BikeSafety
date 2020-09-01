@@ -1,3 +1,10 @@
+/*
+ * Project GPSTrial
+ * Description: Trial Program to Use TinyGPS++ on the Particle Argon with Display to OLED
+ * Author: Brian Rashap
+ * Date: 28-AUG-2020
+ */
+
 #include "Particle.h"
 #include "TinyGPS++.h"
 
@@ -10,7 +17,7 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
-#define OLED_RESET D7
+#define OLED_RESET D4
 Adafruit_SSD1306 display(OLED_RESET);
 
 SYSTEM_THREAD(ENABLED);
@@ -31,7 +38,6 @@ float lat,lon,alt;
 
 //--------ultraSonic variables------///
 bool beam_status = false;
-float duration;
 float cm = 0.0;
 int trigPin = D4;
 int echoPin = D5;
@@ -40,21 +46,29 @@ int echoPin = D5;
 void setup()
 {
 	Serial.begin(9600);
-  delay(500);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
 
-	// The GPS module initialization
+	delay(500);
+   pinMode(trigPin, OUTPUT);
+   pinMode(echoPin, INPUT);
+
+	Serial1.begin(9600);
     startFix = millis();
     gettingFix = true;
 	
 	// OLED Display initialization
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	helloWorld();
+  
+
+	delay(500);
+	Serial.println("attempt 17");
+	delay(500);
+
 }
 
-void loop(){
-  
+void loop()
+{
+	UltraSonicFunction();
 	while (Serial1.available() > 0) {
 		if (gps.encode(Serial1.read())) {
 			displayInfo();
@@ -66,11 +80,12 @@ void loop(){
 void displayInfo() {
 	float lat,lon,alt;
 	uint8_t hr,mn,se,sat;
-	// UltraSonicFunction();
 	if (millis() - lastSerial >= SERIAL_PERIOD) {
 		lastSerial = millis();
 
 		char buf[128];
+		Serial.println(gps.location.isValid());
+	    Serial.println(gps.location.age());
 		if (gps.location.isValid() && gps.location.age() < MAX_GPS_AGE_MS) {
 			lat = gps.location.lat();
 			lon = gps.location.lng(); 
@@ -86,9 +101,10 @@ void displayInfo() {
 			else {
 				hr = hr + 24 + UTC_offset;
 			}
-			// Serial.printf("%i satellites in view --- ",sat);
-			// Serial.printf("Time: %02i:%02i:%02i --- ",hr,mn,se);
-			// Serial.printf("lat: %f, long: %f, alt: %f \n", lat,lon,alt);
+			Serial.printf("Distance in CM: %0.2f \n",cm);
+			Serial.printf("%i satellites in view --- ",sat);
+			Serial.printf("Time: %02i:%02i:%02i --- ",hr,mn,se);
+			Serial.printf("lat: %f, long: %f, alt: %f \n", lat,lon,alt);
 			if (gettingFix) {
 				gettingFix = false;
 				unsigned long elapsed = millis() - startFix;
@@ -99,10 +115,9 @@ void displayInfo() {
 			display.printf("Time: %02i:%02i:%02i \n",hr,mn,se);
 			display.printf("lat  %f \nlong %f \nalt %f\n", lat,lon,alt);
 			display.printf("Satellites in view: %i \n",sat);
-      // Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
-  			// display.println(" ");
-  			// display.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
-  			display.display();
+			display.println("");
+			display.printf("Distance in CM: %0.2f \n",cm);
+			display.display();
 		}
 		else {
 			strcpy(buf, "no location");
@@ -117,9 +132,9 @@ void displayInfo() {
 void helloWorld() {
 	display.clearDisplay();
 	display.setTextSize(1);
-    display.setTextColor(WHITE);
-    display.setCursor(20,5);
-    display.println("GPS Initializing");
+  	display.setTextColor(WHITE);
+  	display.setCursor(20,5);
+  	display.println("GPS Initializing");
 	display.display();
 }
 void UltraSonicFunction(){
@@ -167,12 +182,12 @@ void doSomethingWhenDistanceIs(int distanceIs){
     }
     delay(1000);
 }
-void timerfunction(int timer){
-  //----this is a timer to be used instead of delays-----//
-  int currentTime = millis();
-  int lastSecond;
-  while ((currentTime - lastSecond) < timer){
-         //do nothing//
-  }
-  lastSecond = millis();
-}
+// void timerfunction(int timer){
+//   //----this is a timer to be used instead of delays-----//
+//   int currentTime = millis();
+//   int lastSecond;
+//   while ((currentTime - lastSecond) < timer){
+//          //do nothing//
+//   }
+//   lastSecond = millis();
+// }
