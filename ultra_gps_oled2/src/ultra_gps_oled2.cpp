@@ -30,6 +30,9 @@ void UltraSonicFunction();
 void waitForEcho(int pin, int value, long timeout);
 void sendTriggerPulse(int pin);
 void doSomethingWhenDistanceIs(int distanceIs);
+void SDcardSetup();
+void SDwriteFunction();
+void logData2(long timeLog, int data1);
 #line 20 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
 #define OLED_RESET D4
 Adafruit_SSD1306 display(OLED_RESET);
@@ -98,7 +101,7 @@ void setup()
   
 
 	delay(500);
-	Serial.println("attempt 18");
+	Serial.println("attempt 19");
 	delay(500);
 
 }
@@ -228,3 +231,68 @@ void doSomethingWhenDistanceIs(int distanceIs){
 //   }
 //   lastSecond = millis();
 // }
+void SDcardSetup(){
+	logStart = false;
+  // Initialize at the highest speed supported by the board that is
+  // not over 50 MHz. Try a lower speed if SPI errors occur.cc
+  if (!sd.begin(chipSelect, SD_SCK_MHZ(50))) {
+    sd.initErrorHalt();  
+  }
+
+  if (BASE_NAME_SIZE > 6) {
+    Serial.println("FILE_BASE_NAME too long");
+    while(1);
+  }
+  // Write data header.
+  file.printf("TimeStamp, Random Data %i \n");
+  // Start on a multiple of the sample interval.
+}
+void SDwriteFunction(){
+  // logStart=true; // use a button nomrally
+if (logStart==true) {
+  Serial.printf("Starting Data Logging \n");
+  while (sd.exists(fileName)) {
+    if (fileName[BASE_NAME_SIZE + 1] != '9') {
+      fileName[BASE_NAME_SIZE + 1]++;
+    } else if (fileName[BASE_NAME_SIZE] != '9') {
+      fileName[BASE_NAME_SIZE + 1] = '0';
+      fileName[BASE_NAME_SIZE]++;
+    } else {
+      Serial.println("Can't create file name");
+      while(1);
+    }
+  }
+  if (!file.open(fileName, O_WRONLY | O_CREAT | O_EXCL)) {
+    Serial.println("file.open");
+  }
+  Serial.printf("Logging to: %s \n",fileName);
+  startTime = micros();
+}
+  while(logStart==true) {
+    // for (i=0;i<100;i++) {
+
+      // logTime = micros() - startTime;
+      Serial.print(".");
+      
+      // logData2(secondFrom,Val);
+
+      // Force data to SD and update the directory entry to avoid data loss.
+      if (!file.sync() || file.getWriteError()) {
+      Serial.printf("write error");
+      }
+      delay(random(100,500));
+    // }
+    logStart = false;   // button release
+    if (logStart==false) {
+      file.close();
+      Serial.printf("Done \n");
+      delay(2000);
+      Serial.printf("Ready for next data log \n");
+    }
+  }
+}
+void logData2(long timeLog, int data1) {
+ 
+  Serial.print("Writing data to SDcard \n");
+  file.printf("%i , %i \n",timeLog,data1);
+}
