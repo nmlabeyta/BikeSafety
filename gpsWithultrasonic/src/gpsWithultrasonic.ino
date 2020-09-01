@@ -2,6 +2,12 @@
 // ----Benjamin Hansen & Lee Abeyata
 //-----08/2020
 
+//--- ultrasonic libaries--//
+#include "Adafruit_GFX.h"
+#include "Adafruit_SSD1306.h"
+#define OLED_RESET D7
+Adafruit_SSD1306 display(OLED_RESET);
+
 //---gps libaries---//
 #include "Particle.h"
 #include "TinyGPS++.h"
@@ -41,7 +47,7 @@ void setup() {
 }
 
 void loop() {
-  ifGPSAvailbleDisplay();
+  // ifGPSAvailbleDisplay();
   doSomethingWhenDistanceIs(125);
 }
 //----ultrasonic code----//
@@ -58,8 +64,8 @@ void UltraSonicFunction(){
   long endTime = micros();
   float duration = endTime - startTime;
   cm = duration / 58.0; //the speed of sound?//
-    Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
-    delay(2000);
+    // Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
+    // delay(2000);
 }
 
 void waitForEcho(int pin, int value, long timeout){
@@ -81,18 +87,19 @@ void doSomethingWhenDistanceIs(int distanceIs){
     if (cm<distanceIs){
         if (beam_status==false){
             
-            Serial.println("less than 125cm");
+            Serial.printf("less than 125cm, Distance = %i \n", cm);
+            ifGPSAvailbleDisplay();
             beam_status = true;   
         }
     } else {
         if (beam_status==false){
             
         } else {
-            Serial.print("clear");
+            // Serial.print("clear");
             beam_status = false;
         }
     }
-    delay(1000);
+    delay(100);
 }
 void timerfunction(int timer){
   //----this is a timer to be used instead of delays-----//

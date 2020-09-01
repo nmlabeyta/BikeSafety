@@ -11,7 +11,6 @@
  * Date: 08/27/2020
  */
 
-//--------ultraSonic variables------///
 void setup();
 void loop();
 void UltraSonicFunction();
@@ -19,7 +18,10 @@ void waitForEcho(int pin, int value, long timeout);
 void sendTriggerPulse(int pin);
 void doSomethingWhenDistanceIs(int distanceIs);
 void timerfunction(int timer);
-#line 9 "c:/Users/Benja/Documents/IOT/BikeSafety/Ultrasonic_HC-SR04/src/Ultrasonic_HC-SR04.ino"
+#line 8 "c:/Users/Benja/Documents/IOT/BikeSafety/Ultrasonic_HC-SR04/src/Ultrasonic_HC-SR04.ino"
+SYSTEM_MODE(SEMI_AUTOMATIC);
+
+//--------ultraSonic variables------///
 bool beam_status = false;
 float cm = 0.0;
 int trigPin = D4;

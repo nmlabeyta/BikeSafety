@@ -51,6 +51,7 @@ bool gettingFix = false;
 float lat,lon,alt;
 
 bool beam_status = false;
+float duration;
 float cm = 0.0;
 int trigPin = D4;
 int echoPin = D5;
@@ -62,7 +63,7 @@ void setup()
     pinMode(echoPin, INPUT);
 
 	// The GPS module initialization
-	  Serial1.begin(9600);
+	Serial1.begin(9600);
     startFix = millis();
     gettingFix = true;
 
@@ -73,12 +74,17 @@ void setup()
 }
 
 void loop(){
-  UltraSonicFunction();
+	// UltraSonicFunction();
+	while (Serial1.available() > 0) {
+		if (gps.encode(Serial1.read())) {
+			displayInfo();
+		}
+	}	
 }
 
 void displayInfo() {
 	float lat,lon,alt;
-	uint8_t hr,mn,se;
+	uint8_t hr,mn,se,sat;
 	if (millis() - lastSerial >= SERIAL_PERIOD) {
 		lastSerial = millis();
 
@@ -90,6 +96,7 @@ void displayInfo() {
 			hr = gps.time.hour();
 			mn = gps.time.minute();
 			se = gps.time.second();
+			sat = gps.satellites.value();
 
 			if(hr > 7) {
 				hr = hr + UTC_offset;
@@ -97,6 +104,7 @@ void displayInfo() {
 			else {
 				hr = hr + 24 + UTC_offset;
 			}
+			Serial.printf("%i satellites in view --- ",sat);
 			Serial.printf("Time: %02i:%02i:%02i --- ",hr,mn,se);
 			Serial.printf("lat: %f, long: %f, alt: %f \n", lat,lon,alt);
 			if (gettingFix) {
@@ -108,6 +116,11 @@ void displayInfo() {
 			display.setCursor(0,0);
 			display.printf("Time: %02i:%02i:%02i \n",hr,mn,se);
 			display.printf("lat  %f \nlong %f \nalt %f\n", lat,lon,alt);
+			display.printf("Satellites in view: %i \n",sat);
+			Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
+  			display.println(" ");
+  		    display.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
+  			display.display();
 			display.display();
 		}
 		else {
@@ -136,14 +149,14 @@ void UltraSonicFunction(){
   long startTime = micros();
   waitForEcho(echoPin, LOW, 100);
   long endTime = micros();
-  float duration = endTime - startTime;
+  duration = endTime - startTime;
   cm = duration / 58.0; //the speed of sound?//
-    Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
-   display.clearDisplay();
- 	display.setCursor(0,0);
-    display.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
-    display.display();
-	delay(2000);
+//     Serial.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
+//    display.clearDisplay();
+//  	display.setCursor(0,0);
+//     display.printf("Duration = %0.2f, Distance in CM: %0.2f \n",duration,cm);
+//     display.display();
+	delay(200);
 }
 
 void waitForEcho(int pin, int value, long timeout){

@@ -5,6 +5,8 @@
  * Date: 08/27/2020
  */
 
+SYSTEM_MODE(SEMI_AUTOMATIC);
+
 //--------ultraSonic variables------///
 bool beam_status = false;
 float cm = 0.0;
