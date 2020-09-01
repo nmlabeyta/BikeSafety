@@ -4,8 +4,11 @@
 
 #line 1 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
 
+//---sd card libaries---//
+#include <SPI.h>
+#include <SdFat.h>
 
-
+//-----gps libaries----//
 #include "Particle.h"
 #include "TinyGPS++.h"
 
@@ -18,6 +21,7 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
+//---oled code---//
 void setup();
 void loop();
 void displayInfo();
@@ -26,18 +30,19 @@ void UltraSonicFunction();
 void waitForEcho(int pin, int value, long timeout);
 void sendTriggerPulse(int pin);
 void doSomethingWhenDistanceIs(int distanceIs);
-#line 16 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
+#line 20 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
 #define OLED_RESET D4
 Adafruit_SSD1306 display(OLED_RESET);
 
+//---gps constants ---//
 SYSTEM_THREAD(ENABLED);
-
 const unsigned long PUBLISH_PERIOD = 120000;
 const unsigned long SERIAL_PERIOD = 5000;
 const unsigned long MAX_GPS_AGE_MS = 10000; // GPS location must be newer than this to be considered valid
 
 // The TinyGPS++ object
 TinyGPSPlus gps;
+//---GPS variables ---//
 const int UTC_offset = -6; 
 unsigned long lastSerial = 0;
 unsigned long lastPublish = 0;
@@ -52,6 +57,28 @@ float cm = 0.0;
 int trigPin = D4;
 int echoPin = D5;
 
+//-------SDcard varabiles and presetup code----//
+const int chipSelect = SS;
+//const int SAMPLE_INTERVAL_uS = 50;
+
+#define FILE_BASE_NAME "Data"
+
+// Create file system object.
+SdFat sd;
+SdFile file;
+
+// Time in micros for next data record.
+unsigned long logTime;
+unsigned long startTime;
+int i;
+bool logStart; // ButtonState
+const int startPin = D2;
+const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
+char fileName[13] = FILE_BASE_NAME "00.csv";
+//==============================================================================
+// Error messages stored in flash.
+#define error(msg) sd.errorHalt(msg)
+//------------------------------------------------------------------------------
 
 void setup()
 {
