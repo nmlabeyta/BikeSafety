@@ -32,7 +32,7 @@ void sendTriggerPulse(int pin);
 void doSomethingWhenDistanceIs(int distanceIs);
 void SDcardSetup();
 void SDwriteFunction();
-void logData2(long timeLog, int data1);
+void logData2();
 #line 20 "c:/Users/Benja/Documents/IOT/BikeSafety/ultra_gps_oled2/src/ultra_gps_oled2.ino"
 #define OLED_RESET D4
 Adafruit_SSD1306 display(OLED_RESET);
@@ -51,8 +51,8 @@ unsigned long lastSerial = 0;
 unsigned long lastPublish = 0;
 unsigned long startFix = 0;
 bool gettingFix = false;
-
 float lat,lon,alt;
+uint8_t hr,mn,se,sat;
 
 //--------ultraSonic variables------///
 bool beam_status = false;
@@ -99,6 +99,7 @@ void setup()
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	helloWorld();
   
+  SDcardSetup();
 
 	delay(500);
 	Serial.println("attempt 19");
@@ -114,12 +115,13 @@ void loop()
 			displayInfo();
 		}
 	}
-
+doSomethingWhenDistanceIs(100);
+SDwriteFunction();
 }
 
 void displayInfo() {
-	float lat,lon,alt;
-	uint8_t hr,mn,se,sat;
+	// float lat,lon,alt;
+	// uint8_t hr,mn,se,sat;
 	if (millis() - lastSerial >= SERIAL_PERIOD) {
 		lastSerial = millis();
 
@@ -205,11 +207,12 @@ void sendTriggerPulse(int pin){
 
 void doSomethingWhenDistanceIs(int distanceIs){
   //-----this is the alarm set to go off at 1 meter----//
-  UltraSonicFunction();
+  // UltraSonicFunction();
     if (cm<distanceIs){
         if (beam_status==false){
             
             Serial.println("less than 125cm");
+            logStart = !logStart;
             beam_status = true;   
         }
     } else {
@@ -274,7 +277,7 @@ if (logStart==true) {
       // logTime = micros() - startTime;
       Serial.print(".");
       
-      // logData2(secondFrom,Val);
+      logData2();
 
       // Force data to SD and update the directory entry to avoid data loss.
       if (!file.sync() || file.getWriteError()) {
@@ -291,8 +294,12 @@ if (logStart==true) {
     }
   }
 }
-void logData2(long timeLog, int data1) {
+void logData2() {
  
   Serial.print("Writing data to SDcard \n");
-  file.printf("%i , %i \n",timeLog,data1);
+  file.printf("Time: %02i:%02i:%02i \n",hr,mn,se);
+	file.printf("lat  %f \nlong %f \nalt %f\n", lat,lon,alt);
+	file.printf("Satellites in view: %i \n",sat);
+	file.println("");
+	file.printf("Distance in CM: %0.2f \n",cm);
 }
