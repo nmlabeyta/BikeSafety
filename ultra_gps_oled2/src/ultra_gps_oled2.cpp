@@ -52,7 +52,7 @@ unsigned long lastPublish = 0;
 unsigned long startFix = 0;
 bool gettingFix = false;
 float lat,lon,alt;
-uint8_t hr,mn,se,sat;
+uint8_t hr,mn,se,sat, dy, mth, yr;
 
 //--------ultraSonic variables------///
 bool beam_status = false;
@@ -113,9 +113,10 @@ void loop()
 	while (Serial1.available() > 0) {
 		if (gps.encode(Serial1.read())) {
 			displayInfo();
+      doSomethingWhenDistanceIs(100);
 		}
 	}
-doSomethingWhenDistanceIs(100);
+
 SDwriteFunction();
 }
 
@@ -136,7 +137,9 @@ void displayInfo() {
 			mn = gps.time.minute();
 			se = gps.time.second();
 			sat = gps.satellites.value();
-
+      dy - gps.date.day();
+      mth = gps.date.month();
+      yr = gps.date.year();
 			if(hr > 7) {
 				hr = hr + UTC_offset;
 			}
@@ -174,9 +177,9 @@ void displayInfo() {
 void helloWorld() {
 	display.clearDisplay();
 	display.setTextSize(1);
-  	display.setTextColor(WHITE);
-  	display.setCursor(20,5);
-  	display.println("GPS Initializing");
+  display.setTextColor(WHITE);
+  display.setCursor(20,5);
+  display.println("GPS Initializing");
 	display.display();
 }
 void UltraSonicFunction(){
@@ -281,7 +284,7 @@ if (logStart==true) {
 
       // Force data to SD and update the directory entry to avoid data loss.
       if (!file.sync() || file.getWriteError()) {
-      Serial.printf("write error");
+      Serial.printf("write error \n");
       }
       delay(random(100,500));
     // }
@@ -297,6 +300,7 @@ if (logStart==true) {
 void logData2() {
  
   Serial.print("Writing data to SDcard \n");
+  file.printf("Day: %i, Month %i, Year %i \n", dy, mth, yr);
   file.printf("Time: %02i:%02i:%02i \n",hr,mn,se);
 	file.printf("lat  %f \nlong %f \nalt %f\n", lat,lon,alt);
 	file.printf("Satellites in view: %i \n",sat);

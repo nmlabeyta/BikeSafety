@@ -96,9 +96,10 @@ void loop()
 	while (Serial1.available() > 0) {
 		if (gps.encode(Serial1.read())) {
 			displayInfo();
+      doSomethingWhenDistanceIs(100);
 		}
 	}
-doSomethingWhenDistanceIs(100);
+
 SDwriteFunction();
 }
 
@@ -266,7 +267,7 @@ if (logStart==true) {
 
       // Force data to SD and update the directory entry to avoid data loss.
       if (!file.sync() || file.getWriteError()) {
-      Serial.printf("write error");
+      Serial.printf("write error \n");
       }
       delay(random(100,500));
     // }
