@@ -6,11 +6,11 @@
  */
 
 //---Adafruit IO Libraries---//
-/*#include "secret.h"
+#include "secret.h"
 #include <Adafruit_MQTT.h>
 #include "Adafruit_MQTT/Adafruit_MQTT.h"
 #include "Adafruit_MQTT/Adafruit_MQTT_SPARK.h"
-#include "Adafruit_MQTT/Adafruit_MQTT.h"*/
+#include "Adafruit_MQTT/Adafruit_MQTT.h"
 
 //---sd card libaries---//
 #include <SPI.h>
@@ -40,19 +40,19 @@ const unsigned long SERIAL_PERIOD = 5000;
 const unsigned long MAX_GPS_AGE_MS = 10000; // GPS location must be newer than this to be considered valid
 
 /************ Global State (you don't need to change this!) ***   ***************/
-//TCPClient TheClient;
+TCPClient TheClient;
 
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
-//Adafruit_MQTT_SPARK mqtt(&TheClient,AIO_SERVER,AIO_SERVERPORT,AIO_USERNAME,AIO_KEY);
+Adafruit_MQTT_SPARK mqtt(&TheClient,AIO_SERVER,AIO_SERVERPORT,AIO_USERNAME,AIO_KEY);
 
 /****************************** Feeds ***************************************/
 // Setup Feeds to publish or subscribe
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-//Adafruit_MQTT_Publish latWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Latitude");
-//Adafruit_MQTT_Publish longWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Longitude");
-//Adafruit_MQTT_Publish altWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Altitude");
-//Adafruit_MQTT_Publish distanceWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Distance in CM");
-
+/*Adafruit_MQTT_Publish latWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Latitude");
+Adafruit_MQTT_Publish longWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Longitude");
+Adafruit_MQTT_Publish altWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Altitude");
+Adafruit_MQTT_Publish distanceWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Distance in CM");
+*/
 // The TinyGPS++ object
 TinyGPSPlus gps;
 //---GPS variables ---//
