@@ -6,11 +6,11 @@
  */
 
 //---Adafruit IO Libraries---//
-#include "secret.h"
+/*#include "secret.h"
 #include <Adafruit_MQTT.h>
 #include "Adafruit_MQTT/Adafruit_MQTT.h"
 #include "Adafruit_MQTT/Adafruit_MQTT_SPARK.h"
-#include "Adafruit_MQTT/Adafruit_MQTT.h"
+#include "Adafruit_MQTT/Adafruit_MQTT.h"*/
 
 //---sd card libaries---//
 #include <SPI.h>
@@ -40,18 +40,18 @@ const unsigned long SERIAL_PERIOD = 5000;
 const unsigned long MAX_GPS_AGE_MS = 10000; // GPS location must be newer than this to be considered valid
 
 /************ Global State (you don't need to change this!) ***   ***************/
-TCPClient TheClient;
+//TCPClient TheClient;
 
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
-Adafruit_MQTT_SPARK mqtt(&TheClient,AIO_SERVER,AIO_SERVERPORT,AIO_USERNAME,AIO_KEY);
+//Adafruit_MQTT_SPARK mqtt(&TheClient,AIO_SERVER,AIO_SERVERPORT,AIO_USERNAME,AIO_KEY);
 
 /****************************** Feeds ***************************************/
 // Setup Feeds to publish or subscribe
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-Adafruit_MQTT_Publish latWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Latitude");
-Adafruit_MQTT_Publish longWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Longitude");
-Adafruit_MQTT_Publish altWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Altitude");
-Adafruit_MQTT_Publish distanceWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Distance in CM");
+//Adafruit_MQTT_Publish latWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Latitude");
+//Adafruit_MQTT_Publish longWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Longitude");
+//Adafruit_MQTT_Publish altWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Altitude");
+//Adafruit_MQTT_Publish distanceWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Distance in CM");
 
 // The TinyGPS++ object
 TinyGPSPlus gps;
@@ -71,7 +71,7 @@ int trigPin = D4;
 int echoPin = D5;
 
 //-------SDcard varabiles and presetup code----//
-const int chipSelect = SS;
+const int chipSelect = D14;
 //const int SAMPLE_INTERVAL_uS = 50;
 
 #define FILE_BASE_NAME "Data"
@@ -104,9 +104,6 @@ void setup()
 	Serial1.begin(9600);
     startFix = millis();
     gettingFix = true;
-
-    Particle.syncTime();
-  waitUntil(Particle.syncTime);
 	
 	// OLED Display initialization
 	//display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -127,7 +124,6 @@ void loop()
 	UltraSonicFunction();
   
 	while (Serial1.available() > 0) {
-    Serial.printf("Here 1\n");
 		if (gps.encode(Serial1.read())) {
 			displayInfo();
       //subscribePublish();
@@ -140,7 +136,7 @@ SDwriteFunction();
 
 // Function to connect and reconnect as necessary to the MQTT server.
 // Should be called in the loop function and it will take care if connecting.
-void MQTT_connect() {
+/*void MQTT_connect() {
   int8_t ret;
 
   // Stop if already connected.
@@ -157,10 +153,10 @@ void MQTT_connect() {
        delay(5000);  // wait 5 seconds
   }
   Serial.println("MQTT Connected!");
-}
+}*/
 
 
-void packetGroper(){
+/*void packetGroper(){
   unsigned long last;
   unsigned long currentMil;
 
@@ -173,7 +169,7 @@ void packetGroper(){
       }
       last = currentMil;
   }
-}
+}*/
 
 void displayInfo() {
 	// float lat,lon,alt;
@@ -365,7 +361,7 @@ void logData2() {
 	file.printf("Distance in CM: %0.2f \n",cm);
 }
 
-void subscribePublish(){
+/*void subscribePublish(){
   unsigned long lastTime;
 
   // this is our 'wait for incoming subscription packets' busy subloop
@@ -381,4 +377,4 @@ void subscribePublish(){
       }
     lastTime = millis();
   }
-}
+}*/
