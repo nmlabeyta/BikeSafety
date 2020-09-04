@@ -6,7 +6,7 @@
  */
 
 //---Adafruit IO Libraries---//
-#include "<secret.h>
+#include "secret.h"
 #include <Adafruit_MQTT.h>
 #include "Adafruit_MQTT/Adafruit_MQTT.h"
 #include "Adafruit_MQTT/Adafruit_MQTT_SPARK.h"
@@ -128,6 +128,7 @@ void loop()
 	while (Serial1.available() > 0) {
 		if (gps.encode(Serial1.read())) {
 			displayInfo();
+      subscribePublish();
       doSomethingWhenDistanceIs(100);
 		}
 	}
