@@ -44,7 +44,7 @@ int trigPin = D4;
 int echoPin = D5;
 
 //-------SDcard varabiles and presetup code----//
-const int chipSelect = SS;
+const int chipSelect = D14;
 //const int SAMPLE_INTERVAL_uS = 50;
 
 #define FILE_BASE_NAME "Data"
