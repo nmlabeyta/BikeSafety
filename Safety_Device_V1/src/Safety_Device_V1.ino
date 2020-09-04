@@ -122,13 +122,15 @@ void setup()
 
 void loop()
 {
-  packetGroper();
-  MQTT_connect();
+  //packetGroper();
+  //MQTT_connect();
 	UltraSonicFunction();
+  
 	while (Serial1.available() > 0) {
+    Serial.printf("Here 1\n");
 		if (gps.encode(Serial1.read())) {
 			displayInfo();
-      subscribePublish();
+      //subscribePublish();
       doSomethingWhenDistanceIs(100);
 		}
 	}
