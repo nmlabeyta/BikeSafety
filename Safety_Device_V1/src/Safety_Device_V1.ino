@@ -48,11 +48,11 @@ Adafruit_MQTT_SPARK mqtt(&TheClient,AIO_SERVER,AIO_SERVERPORT,AIO_USERNAME,AIO_K
 /****************************** Feeds ***************************************/
 // Setup Feeds to publish or subscribe
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-/*Adafruit_MQTT_Publish latWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Latitude");
+Adafruit_MQTT_Publish latWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Latitude");
 Adafruit_MQTT_Publish longWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Longitude");
 Adafruit_MQTT_Publish altWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Altitude");
 Adafruit_MQTT_Publish distanceWrite = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Distance in CM");
-*/
+
 // The TinyGPS++ object
 TinyGPSPlus gps;
 //---GPS variables ---//
@@ -119,14 +119,13 @@ void setup()
 
 void loop()
 {
-  //packetGroper();
-  //MQTT_connect();
+  packetGroper();
+  MQTT_connect();
 	UltraSonicFunction();
   
 	while (Serial1.available() > 0) {
 		if (gps.encode(Serial1.read())) {
 			displayInfo();
-      //subscribePublish();
       doSomethingWhenDistanceIs(100);
 		}
 	}
@@ -136,7 +135,7 @@ SDwriteFunction();
 
 // Function to connect and reconnect as necessary to the MQTT server.
 // Should be called in the loop function and it will take care if connecting.
-/*void MQTT_connect() {
+void MQTT_connect() {
   int8_t ret;
 
   // Stop if already connected.
@@ -153,10 +152,10 @@ SDwriteFunction();
        delay(5000);  // wait 5 seconds
   }
   Serial.println("MQTT Connected!");
-}*/
+}
 
 
-/*void packetGroper(){
+void packetGroper(){
   unsigned long last;
   unsigned long currentMil;
 
@@ -169,7 +168,7 @@ SDwriteFunction();
       }
       last = currentMil;
   }
-}*/
+}
 
 void displayInfo() {
 	// float lat,lon,alt;
@@ -206,6 +205,7 @@ void displayInfo() {
 				unsigned long elapsed = millis() - startFix;
 				Serial.printlnf("%lu milliseconds to get GPS fix", elapsed);
 			}
+      
 			/*display.clearDisplay();
 			display.setCursor(0,0);
 			display.printf("Time: %02i:%02i:%02i \n",hr,mn,se);
@@ -359,15 +359,15 @@ void logData2() {
 	file.printf("Satellites in view: %i \n",sat);
 	file.println("");
 	file.printf("Distance in CM: %0.2f \n",cm);
+  subscribePublish();
 }
 
-/*void subscribePublish(){
-  unsigned long lastTime;
+void subscribePublish(){
+
 
   // this is our 'wait for incoming subscription packets' busy subloop
   // try to spend your time here
-
-    if((millis()-lastTime > 10000)) {
+    
     if(mqtt.Update()) {
      latWrite.publish(lat);
      longWrite.publish(lon);
@@ -375,6 +375,4 @@ void logData2() {
      distanceWrite.publish(cm);
       Serial.printf("Publishing Data \n");
       }
-    lastTime = millis();
   }
-}*/
