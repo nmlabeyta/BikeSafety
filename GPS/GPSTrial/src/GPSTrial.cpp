@@ -2,7 +2,7 @@
 //       THIS IS A GENERATED FILE - DO NOT EDIT       //
 /******************************************************/
 
-#line 1 "c:/Users/Benja/Documents/IOT/instructor_master/Utilities/GPSTrial/src/GPSTrial.ino"
+#line 1 "c:/Users/Benja/Documents/IOT/BikeSafety/GPS/GPSTrial/src/GPSTrial.ino"
 /*
  * Project GPSTrial
  * Description: Trial Program to Use TinyGPS++ on the Particle Argon with Display to OLED
@@ -22,7 +22,7 @@
 void setup();
 void loop();
 void displayInfo();
-#line 17 "c:/Users/Benja/Documents/IOT/instructor_master/Utilities/GPSTrial/src/GPSTrial.ino"
+#line 17 "c:/Users/Benja/Documents/IOT/BikeSafety/GPS/GPSTrial/src/GPSTrial.ino"
 SYSTEM_THREAD(ENABLED);
 
 const unsigned long PUBLISH_PERIOD = 120000;

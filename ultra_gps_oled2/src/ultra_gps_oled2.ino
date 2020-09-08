@@ -85,7 +85,7 @@ void setup()
   SDcardSetup();
 
 	delay(500);
-	Serial.println("attempt 19");
+
 	delay(500);
 
 }
@@ -95,6 +95,7 @@ void loop()
 	UltraSonicFunction();
 	while (Serial1.available() > 0) {
 		if (gps.encode(Serial1.read())) {
+      	Serial.println("Made it here, attempt 1");
 			displayInfo();
       doSomethingWhenDistanceIs(100);
 		}
