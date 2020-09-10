@@ -137,6 +137,10 @@ void setup() {
 #endif
 }
 
+
+
+
+
 void loop() {
   static uint32_t msSend = 0;    
 
@@ -342,7 +346,7 @@ void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tai
   Log.trace(__FUNCTION__); 
 
   int snap   = -1;  // uCamIII_SNAP_TYPE
-  //int fmt    = -1;  // uCamIII_IMAGE_FORMAT 
+  int fmt    = -1;  // uCamIII_IMAGE_FORMAT 
   int res    = -1;  // uCamIII_RES          
   int rawRes = -1;
   int jpgRes = -1;

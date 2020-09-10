@@ -71,7 +71,7 @@ SOFTWARE.
 #include <uCamIII.h>
 
 #warning "WebServer library needs to be imported" 
-//#include "WebServer.h"
+#include "WebServer.h"
 
 //#include "TCPClientX.h"  // ------------------------------------- // Web IDE does not allow multi file examples 
 																	//   so everything in one file (not very tidy)
@@ -110,7 +110,7 @@ size_t TCPClientX::write(const uint8_t *buffer, size_t size)
 //#include "WebPage.h"  // ---------------------------------------- // Web IDE does not allow multi file examples
 																	//   so everything in one file (not very tidy)
 #if Wiring_WiFi
-//#include "WebServer.h"
+#include "WebServer.h"
 
 #define COLOR_TYPE "CT"
 #define RAW_RES    "RR"
