@@ -20,18 +20,18 @@
 #include "Particle.h"
 #include "TinyGPS++.h"
 
-/*
- * GPS Module Connections
- * GPS Unit Rx connects to Argon Pin D9  (UART1_TX)
- * GPS Unit Tx connects to Argon Pin D10 (UART1_RX)
-*/
-
 //#include "Adafruit_GFX.h"
 //#include "Adafruit_SSD1306.h"
 
 //---oled code---//
 //#define OLED_RESET D4
 //Adafruit_SSD1306 display(OLED_RESET);
+
+/*
+ * GPS Module Connections
+ * GPS Unit Rx connects to Argon Pin D9  (UART1_TX)
+ * GPS Unit Tx connects to Argon Pin D10 (UART1_RX)
+*/
 
 //---gps constants ---//
 SYSTEM_THREAD(ENABLED);
@@ -112,7 +112,7 @@ void setup()
   SDcardSetup();
 
 	delay(500);
-	Serial.println("attempt 19");
+	Serial.println("attempt 20");
 	delay(500);
 
 }
@@ -156,8 +156,8 @@ void MQTT_connect() {
 
 
 void packetGroper(){
-  unsigned long last;
-  unsigned long currentMil;
+ static unsigned long last;
+ static unsigned long currentMil;
 
   currentMil = millis();
   if ((millis()-last)>120000) {
@@ -270,16 +270,17 @@ void doSomethingWhenDistanceIs(int distanceIs){
             Serial.println("less than 125cm");
             logStart = !logStart;
             beam_status = true;   
+            subscribePublish();
         }
     } else {
         if (beam_status==false){
             
         } else {
-            Serial.print("clear");
+            Serial.print("clear \n");
             beam_status = false;
         }
     }
-    delay(1000);
+    delay(200);
 }
 // void timerfunction(int timer){
 //   //----this is a timer to be used instead of delays-----//
@@ -371,7 +372,7 @@ void subscribePublish(){
     if(mqtt.Update()) {
      latWrite.publish(lat);
      longWrite.publish(lon);
-     altWrite.publish(alt);
+    //  altWrite.publish(alt);
      distanceWrite.publish(cm);
       Serial.printf("Publishing Data \n");
       }
