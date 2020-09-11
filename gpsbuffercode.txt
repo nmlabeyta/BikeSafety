@@ -1,0 +1,19 @@
+ char gpsbuffer[30];                         // Combine Latitude, Longitude, Altitude into a buffer of size X
+            char *p = gpsbuffer;                        // Create a buffer to store GPS information to upload to Adafruit IO                       </p><p>            dtostrf(Distance_To_Home, 3, 4, p);         // Convert Distance to Home to a String Variable and add it to the buffer
+            p += strlen(p);
+            p[0] = ','; p++;                      
+            
+            dtostrf(lat, 3, 6, p);                   // Convert GPSlat(latitude) to a String variable and add it to the buffer
+            p += strlen(p);
+            p[0] = ','; p++;
+                                                            
+            dtostrf(lon, 3, 6, p);                   // Convert GPSlng(longitude) to a String variable and add it to the buffer
+            p += strlen(p);
+            p[0] = ','; p++;  
+                                                            
+            dtostrf(alt, 2, 1, p);                   // Convert GPSalt(altimeter) to a String variable and add it to the buffer
+            p += strlen(p);
+                                                                        
+            p[0] = 0;                                   // null terminate, end of buffer array</p><p>            if ((GPSlng != 0) && (GPSlat != 0))         // If GPS longitude or latitude do not equal zero then Publish
+             
+}			  
